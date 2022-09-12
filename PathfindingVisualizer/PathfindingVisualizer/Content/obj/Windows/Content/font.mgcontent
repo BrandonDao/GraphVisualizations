@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PipelineBuildEvent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SourceFile>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/PathfindingVisualizer/PathfindingVisualizer/Content/font.spritefont</SourceFile>
+  <SourceTime>2022-02-01T12:54:01.2324605-08:00</SourceTime>
+  <DestFile>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/PathfindingVisualizer/PathfindingVisualizer/Content/bin/Windows/Content/font.xnb</DestFile>
+  <DestTime>2022-07-11T17:05:01.6433933-07:00</DestTime>
+  <Importer>FontDescriptionImporter</Importer>
+  <ImporterTime>2020-08-10T09:17:54-07:00</ImporterTime>
+  <Processor>FontDescriptionProcessor</Processor>
+  <ProcessorTime>2020-08-10T09:17:54-07:00</ProcessorTime>
+  <Parameters>
+    <Key>PremultiplyAlpha</Key>
+    <Value>True</Value>
+  </Parameters>
+  <Parameters>
+    <Key>TextureFormat</Key>
+    <Value>Compressed</Value>
+  </Parameters>
+  <Dependencies />
+  <BuildAsset />
+  <BuildOutput />
+</PipelineBuildEvent>
