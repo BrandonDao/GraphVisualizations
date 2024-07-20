@@ -4,10 +4,10 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/MazeGenerator/MazeGenerator/Content/cross.png</File>
-    <File>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/MazeGenerator/MazeGenerator/Content/font.spritefont</File>
-    <File>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/MazeGenerator/MazeGenerator/Content/minus.png</File>
-    <File>C:/Users/brand/Documents/GitHub/Projects/cSharp/Monogame/MazeGenerator/MazeGenerator/Content/plus.png</File>
+    <File>C:/Users/brand/Documents/Github/GraphVisualizations/MazeGenerator/MazeGenerator/Content/cross.png</File>
+    <File>C:/Users/brand/Documents/Github/GraphVisualizations/MazeGenerator/MazeGenerator/Content/font.spritefont</File>
+    <File>C:/Users/brand/Documents/Github/GraphVisualizations/MazeGenerator/MazeGenerator/Content/minus.png</File>
+    <File>C:/Users/brand/Documents/Github/GraphVisualizations/MazeGenerator/MazeGenerator/Content/plus.png</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

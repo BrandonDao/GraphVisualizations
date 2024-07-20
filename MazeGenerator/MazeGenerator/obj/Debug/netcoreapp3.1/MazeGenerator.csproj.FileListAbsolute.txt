@@ -41,3 +41,5 @@ C:\Users\brand\Documents\GitHub\Projects\cSharp\Monogame\MazeGenerator\MazeGener
 C:\Users\brand\Documents\GitHub\Projects\cSharp\Monogame\MazeGenerator\MazeGenerator\bin\Debug\netcoreapp3.1\Content\font.xnb
 C:\Users\brand\Documents\GitHub\Projects\cSharp\Monogame\MazeGenerator\MazeGenerator\bin\Debug\netcoreapp3.1\Content\minus.xnb
 C:\Users\brand\Documents\GitHub\Projects\cSharp\Monogame\MazeGenerator\MazeGenerator\bin\Debug\netcoreapp3.1\Content\plus.xnb
+C:\Users\brand\Documents\Github\GraphVisualizations\MazeGenerator\MazeGenerator\obj\Debug\netcoreapp3.1\MazeGenerator.dll
+C:\Users\brand\Documents\Github\GraphVisualizations\MazeGenerator\MazeGenerator\obj\Debug\netcoreapp3.1\MazeGenerator.pdb

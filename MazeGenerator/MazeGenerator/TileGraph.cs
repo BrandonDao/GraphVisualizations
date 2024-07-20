@@ -47,11 +47,11 @@ namespace MazeGenerator
             Y = y;
             Size = size;
             BorderSize = borderSize;
-            BorderColors = new Color[2]
-            {
+            BorderColors =
+            [
                 Color.Black,
                 Color.Black,
-            };
+            ];
             TileType = tileType;
             Texture = texture;
 
@@ -126,28 +126,30 @@ namespace MazeGenerator
         public int TileSize { get; set; }
         public int TileBorderSize { get; set; }
         public int SandTileWeight { get; set; }
-        Tile[,] tiles { get; set; }
-        Tile lastValidTile { get; set; }
+        private Tile[,] Tiles { get; set; }
+        private Tile LastValidTile { get; set; }
 
-        TileTypes draggingTileType { get; set; }
-        TileTypes selectedTileType { get; set; }
-        SpecialTileTypes specialTileType { get; set; }
+        private TileTypes DraggingTileType { get; set; }
+        private TileTypes SelectedTileType { get; set; }
+        private SpecialTileTypes SpecialTileType { get; set; }
 
-        Dictionary<Point, Vertex> vertexMap { get; set; }
-        WeightedDirectedGraph<Tile> vertexGraph { get; set; }
+        private Dictionary<Point, Vertex> VertexMap { get; set; }
+        private WeightedDirectedGraph<Tile> VertexGraph { get; set; }
 
-        enum pathfinderNames
+        private enum PathfinderNames
         {
             Djikstra,
             AStar
         }
-        Func<Vertex, Vertex, float, float, float> heuristic { get; set; }
-        Vertex startVertex { get; set; }
-        Vertex endVertex { get; set; }
-        List<Vertex> path;
-        List<Vertex> visitedNodes;
 
-        enum buttonNames
+        private Func<Vertex, Vertex, float, float, float> Heuristic { get; set; }
+        private Vertex StartVertex { get; set; }
+        private Vertex EndVertex { get; set; }
+
+        private List<Vertex> path;
+        private List<Vertex> visitedNodes;
+
+        private enum ButtonNames
         {
             GenMaze,
             ZoomIn,
@@ -159,11 +161,12 @@ namespace MazeGenerator
             SelectChebyshev,
             SelectEuclidean
         }
-        Button[] buttons { get; set; }
-        Vector2 ButtonInfoPos { get; set; }
 
-        int visualizationProgressionIndex { get; set; }
-        Stopwatch stopwatch { get; set; }
+        private Button[] Buttons { get; set; }
+        private Vector2 ButtonInfoPos { get; set; }
+
+        private int VisualizationProgressionIndex { get; set; }
+        private Stopwatch Stopwatch { get; set; }
 
         public TileGraph(
             GraphicsDevice graphicsDevice,
@@ -192,26 +195,26 @@ namespace MazeGenerator
             TileSize = 14;
             TileBorderSize = 1;
             SandTileWeight = 2;
-            tiles = new Tile[GraphSize, GraphSize];
+            Tiles = new Tile[GraphSize, GraphSize];
 
-            selectedTileType = TileTypes.Wall;
-            specialTileType = SpecialTileTypes.None;
+            SelectedTileType = TileTypes.Wall;
+            SpecialTileType = SpecialTileTypes.None;
 
-            vertexMap = new Dictionary<Point, Vertex>();
-            vertexGraph = new WeightedDirectedGraph<Tile>(SandTileWeight);
+            VertexMap = [];
+            VertexGraph = new WeightedDirectedGraph<Tile>(SandTileWeight);
 
             #region BuildingGraph
             for (int y = 0; y < GraphSize; y++)
             {
                 for (int x = 0; x < GraphSize; x++)
                 {
-                    tiles[y, x] = new Tile(x, y, TileSize, TileBorderSize, TileTypes.Space, TileTexture, graphicsDevice);
+                    Tiles[y, x] = new Tile(x, y, TileSize, TileBorderSize, TileTypes.Space, TileTexture, graphicsDevice);
 
                     var point = new Point(x, y);
                     var vertex = new Vertex(x, y, Vertex.Types.Space);
 
-                    vertexMap.Add(point, vertex);
-                    vertexGraph.AddVertex(vertexMap[point]);
+                    VertexMap.Add(point, vertex);
+                    VertexGraph.AddVertex(VertexMap[point]);
                 }
             }
             //var points = new Point[8];
@@ -250,14 +253,14 @@ namespace MazeGenerator
 
             #endregion BuildingGraph
 
-            heuristic = WeightedDirectedGraph<int>.Manhattan;
-            path = new List<Vertex>();
-            visitedNodes = new List<Vertex>();
+            Heuristic = WeightedDirectedGraph<int>.Manhattan;
+            path = [];
+            visitedNodes = [];
 
             #region SettingButtonProperties
-            buttons = new Button[9];
+            Buttons = new Button[9];
 
-            buttons[(int)buttonNames.GenMaze] = new Button(
+            Buttons[(int)ButtonNames.GenMaze] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 50,
@@ -267,7 +270,7 @@ namespace MazeGenerator
                 fontColor: Color.White,
                 backgroundColor: Color.White);//Color.Lerp(Color.DimGray, Color.LightSkyBlue, .25f));
 
-            buttons[(int)buttonNames.ZoomIn] = new Button(
+            Buttons[(int)ButtonNames.ZoomIn] = new Button(
                 texture: ZoomInButtonTexture,
                 font: ButtonFont,
                 width: 50,
@@ -277,7 +280,7 @@ namespace MazeGenerator
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.ZoomOut] = new Button(
+            Buttons[(int)ButtonNames.ZoomOut] = new Button(
                 texture: ZoomOutButtonTexture,
                 font: ButtonFont,
                 width: 50,
@@ -287,27 +290,27 @@ namespace MazeGenerator
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.RunDjikstra] = new Button(
+            Buttons[(int)ButtonNames.RunDjikstra] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 50,
                 height: 50,
-                action: () => { RunPathfinding(pathfinderNames.Djikstra); },
+                action: () => { RunPathfinding(PathfinderNames.Djikstra); },
                 text: "Run Djikstra",
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.RunAStar] = new Button(
+            Buttons[(int)ButtonNames.RunAStar] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 50,
                 height: 50,
-                action: () => { RunPathfinding(pathfinderNames.AStar); },
+                action: () => { RunPathfinding(PathfinderNames.AStar); },
                 text: "Run A*",
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.SelectManhattan] = new Button(
+            Buttons[(int)ButtonNames.SelectManhattan] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 25,
@@ -316,14 +319,14 @@ namespace MazeGenerator
                 {
                     ChangeSelectedHeuristic(
                         newHeuristic: WeightedDirectedGraph<int>.Manhattan,
-                        buttonIndex: (int)buttonNames.SelectManhattan,
+                        buttonIndex: (int)ButtonNames.SelectManhattan,
                         newOrdinalDistance: (float)Math.Sqrt(2));
                 },
                 text: "Manhattan Heuristic (Selected)",
                 fontColor: Color.White,
                 backgroundColor: Color.LightSkyBlue);
 
-            buttons[(int)buttonNames.SelectOctile] = new Button(
+            Buttons[(int)ButtonNames.SelectOctile] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 25,
@@ -332,14 +335,14 @@ namespace MazeGenerator
                 {
                     ChangeSelectedHeuristic(
                         newHeuristic: WeightedDirectedGraph<int>.Diagonal,
-                        buttonIndex: (int)buttonNames.SelectOctile,
+                        buttonIndex: (int)ButtonNames.SelectOctile,
                         newOrdinalDistance: (float)Math.Sqrt(2));
                 },
                 text: "Octile Heuristic",
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.SelectChebyshev] = new Button(
+            Buttons[(int)ButtonNames.SelectChebyshev] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 25,
@@ -348,14 +351,14 @@ namespace MazeGenerator
                 {
                     ChangeSelectedHeuristic(
                         newHeuristic: WeightedDirectedGraph<int>.Diagonal,
-                        buttonIndex: (int)buttonNames.SelectChebyshev,
+                        buttonIndex: (int)ButtonNames.SelectChebyshev,
                         newOrdinalDistance: 1f);
                 },
                 text: "Chebyshev Heuristic",
                 fontColor: Color.White,
                 backgroundColor: null);
 
-            buttons[(int)buttonNames.SelectEuclidean] = new Button(
+            Buttons[(int)ButtonNames.SelectEuclidean] = new Button(
                 texture: ButtonTexture,
                 font: ButtonFont,
                 width: 25,
@@ -364,7 +367,7 @@ namespace MazeGenerator
                 {
                     ChangeSelectedHeuristic(
                         newHeuristic: WeightedDirectedGraph<int>.Euclidean,
-                        buttonIndex: (int)buttonNames.SelectEuclidean,
+                        buttonIndex: (int)ButtonNames.SelectEuclidean,
                         newOrdinalDistance: (float)Math.Sqrt(2));
                 },
                 text: "Euclidean Heuristic",
@@ -373,7 +376,7 @@ namespace MazeGenerator
 
             int buttonX = graphicsDevice.Viewport.Height + 50;
             int buttonGroupYOffsets = 10;
-            for (int i = 0; i < buttons.Length; i++)
+            for (int i = 0; i < Buttons.Length; i++)
             {
                 if (i == 1 || i == 3 || i == 4)
                 {
@@ -383,18 +386,18 @@ namespace MazeGenerator
                 {
                     buttonGroupYOffsets -= 25;
                 }
-                buttons[i].Position = new Vector2(buttonX, buttonGroupYOffsets + buttons[0].Height * 1.15f * i);
+                Buttons[i].Position = new Vector2(buttonX, buttonGroupYOffsets + Buttons[0].Height * 1.15f * i);
             }
-            ButtonInfoPos = new Vector2(buttonX, buttonGroupYOffsets + buttons[0].Height * 1.15f * buttons.Length);
+            ButtonInfoPos = new Vector2(buttonX, buttonGroupYOffsets + Buttons[0].Height * 1.15f * Buttons.Length);
             #endregion SettingButtonProperties
 
-            visualizationProgressionIndex = 0;
-            stopwatch = new Stopwatch();
+            VisualizationProgressionIndex = 0;
+            Stopwatch = new Stopwatch();
 
-            tiles[0, 0].TileType = TileTypes.Start;
-            tiles[GraphSize - 1, GraphSize - 1].TileType = TileTypes.End;
-            startVertex = vertexMap[new Point(0, 0)];
-            endVertex = vertexMap[new Point(GraphSize - 1, GraphSize - 1)];
+            Tiles[0, 0].TileType = TileTypes.Start;
+            Tiles[GraphSize - 1, GraphSize - 1].TileType = TileTypes.End;
+            StartVertex = VertexMap[new Point(0, 0)];
+            EndVertex = VertexMap[new Point(GraphSize - 1, GraphSize - 1)];
         }
 
         public void Update(MouseState mouseState, MouseState prevMouseState, KeyboardState keyboardState, Viewport viewport)
@@ -418,17 +421,17 @@ namespace MazeGenerator
                 Camera.ZoomOut(1);
             }
 
-            foreach (var button in buttons)
+            foreach (var button in Buttons)
             {
                 button.Update(mouseState, prevMouseState);
             }
 
             UpdateTiles(mouseState, prevMouseState, mousePos, prevMousePos, viewport);
 
-            if (stopwatch.ElapsedMilliseconds >= 10 && visualizationProgressionIndex < visitedNodes.Count)
+            if (Stopwatch.ElapsedMilliseconds >= 10 && VisualizationProgressionIndex < visitedNodes.Count)
             {
-                visualizationProgressionIndex++;
-                stopwatch.Restart();
+                VisualizationProgressionIndex++;
+                Stopwatch.Restart();
             }
 
             UpdateCameraPosition(keyboardState);
@@ -455,9 +458,9 @@ namespace MazeGenerator
             mousePos = (tempPos / tileWidth).ToPoint();
 
             // set tile type to visited
-            for (int i = 0; i < visualizationProgressionIndex; i++)
+            for (int i = 0; i < VisualizationProgressionIndex; i++)
             {
-                var tile = tiles[visitedNodes[i].Y, visitedNodes[i].X];
+                var tile = Tiles[visitedNodes[i].Y, visitedNodes[i].X];
                 if (!tile.TileType.HasFlag(TileTypes.Start) && !tile.TileType.HasFlag(TileTypes.End))
                 {
                     tile.TileType |= TileTypes.VisitedSpace;
@@ -465,15 +468,15 @@ namespace MazeGenerator
             }
 
             // draw tiles
-            foreach (var tile in tiles)
+            foreach (var tile in Tiles)
             {
                 tile.Draw(spriteBatch);
             }
 
             // draw tile when dragging start or end
-            if (specialTileType != SpecialTileTypes.None && mousePos.X < GraphSize && mousePos.X >= 0 && mousePos.Y < GraphSize && mousePos.Y >= 0)
+            if (SpecialTileType != SpecialTileTypes.None && mousePos.X < GraphSize && mousePos.X >= 0 && mousePos.Y < GraphSize && mousePos.Y >= 0)
             {
-                var tile = tiles[mousePos.Y, mousePos.X];
+                var tile = Tiles[mousePos.Y, mousePos.X];
 
                 spriteBatch.Draw(
                     TileTexture,
@@ -482,11 +485,11 @@ namespace MazeGenerator
                         tile.Y * tileWidth,
                         tile.Size,
                         tile.Size),
-                    specialTileType == SpecialTileTypes.Start ? Color.Green : Color.Red);
+                    SpecialTileType == SpecialTileTypes.Start ? Color.Green : Color.Red);
             }
 
             // draw line from start to end
-            if (visualizationProgressionIndex >= visitedNodes.Count - 1)
+            if (VisualizationProgressionIndex >= visitedNodes.Count - 1)
             {
                 for (int i = 0; i < path.Count - 1; i++)
                 {
@@ -504,7 +507,7 @@ namespace MazeGenerator
             var pathLength = 0;
             foreach (var vertex in path)
             {
-                if (vertex == startVertex || vertex == endVertex) continue;
+                if (vertex == StartVertex || vertex == EndVertex) continue;
 
                 if (vertex.Type == Vertex.Types.Sand)
                 {
@@ -512,9 +515,9 @@ namespace MazeGenerator
                 }
                 pathLength++;
             }
-            spriteBatch.DrawString(ButtonFont, $"WASD or Arrow Keys to pan, space to reset camera\n\nClick + drag on empty spaces to place obstacles,\nClick + drag on obstacles to remove\n\nVisited Tiles: {visualizationProgressionIndex}/{visitedNodes.Count}\nPath Length: {pathLength}", ButtonInfoPos, Color.White);
+            spriteBatch.DrawString(ButtonFont, $"WASD or Arrow Keys to pan, space to reset camera\n\nVisited Tiles: {VisualizationProgressionIndex}/{visitedNodes.Count}\nPath Length: {pathLength}", ButtonInfoPos, Color.White);
 
-            foreach (var button in buttons)
+            foreach (var button in Buttons)
             {
                 button.Draw(spriteBatch);
             }
@@ -522,10 +525,10 @@ namespace MazeGenerator
 
         private void GenMaze()
         {
-            stopwatch.Restart();
-            stopwatch.Stop();
-            vertexMap = new Dictionary<Point, Vertex>();
-            vertexGraph = new WeightedDirectedGraph<Tile>(SandTileWeight);
+            Stopwatch.Restart();
+            Stopwatch.Stop();
+            VertexMap = [];
+            VertexGraph = new WeightedDirectedGraph<Tile>(SandTileWeight);
 
             for (int y = 0; y < GraphSize; y++)
             {
@@ -534,23 +537,23 @@ namespace MazeGenerator
                     var point = new Point(x, y);
                     var vertex = new Vertex(x, y, Vertex.Types.Space);
 
-                    vertexMap.Add(point, vertex);
-                    vertexGraph.AddVertex(vertexMap[point]);
+                    VertexMap.Add(point, vertex);
+                    VertexGraph.AddVertex(VertexMap[point]);
 
-                    tiles[y, x].BorderColors[(int)Tile.Borders.Bottom] = Color.Black;
-                    tiles[y, x].BorderColors[(int)Tile.Borders.Right] = Color.Black;
+                    Tiles[y, x].BorderColors[(int)Tile.Borders.Bottom] = Color.Black;
+                    Tiles[y, x].BorderColors[(int)Tile.Borders.Right] = Color.Black;
                 }
             }
-            var start = new Point(startVertex.X, startVertex.Y);
-            var end = new Point(endVertex.X, endVertex.Y);
+            var start = new Point(StartVertex.X, StartVertex.Y);
+            var end = new Point(EndVertex.X, EndVertex.Y);
 
-            tiles[start.Y, start.X].TileType = TileTypes.Start;
-            tiles[end.Y, end.X].TileType = TileTypes.End;
-            startVertex = vertexMap[start];
-            endVertex = vertexMap[end];
+            Tiles[start.Y, start.X].TileType = TileTypes.Start;
+            Tiles[end.Y, end.X].TileType = TileTypes.End;
+            StartVertex = VertexMap[start];
+            EndVertex = VertexMap[end];
 
 
-            var unionFind = new QuickFind<Vertex>(vertexGraph.Vertices);
+            var unionFind = new QuickFind<Vertex>(VertexGraph.Vertices);
             var rng = new Random();
 
             Vertex p;
@@ -558,10 +561,10 @@ namespace MazeGenerator
 
             var pointOffsets = new Point[4]
             {
-                new Point(0, -1),
-                new Point(-1, 0),
-                new Point(0, 1),
-                new Point(1, 0)
+                new(0, -1),
+                new(-1, 0),
+                new(0, 1),
+                new(1, 0)
             };
 
             while (unionFind.SetCount > 1)
@@ -569,24 +572,24 @@ namespace MazeGenerator
                 do
                 {
                     var pPoint = new Point(rng.Next(0, GraphSize), rng.Next(0, GraphSize));
-                    p = vertexMap[pPoint];
+                    p = VertexMap[pPoint];
 
                     Point pointOffset;
                     do
                     {
                         pointOffset = pointOffsets[rng.Next(0, pointOffsets.Length)];
-                    } while (!vertexMap.ContainsKey(pPoint + pointOffset));
+                    } while (!VertexMap.ContainsKey(pPoint + pointOffset));
 
 
-                    q = vertexMap[pPoint + pointOffset];
+                    q = VertexMap[pPoint + pointOffset];
                 }
                 while (!unionFind.Union(p, q));
-                vertexGraph.AddEdge(p, q, distance: 1);
-                vertexGraph.AddEdge(q, p, distance: 1);
+                VertexGraph.AddEdge(p, q, distance: 1);
+                VertexGraph.AddEdge(q, p, distance: 1);
 
                 var isHorizontallyConnected = p.Y == q.Y;
 
-                Vertex topLeftVertex = p;
+                Vertex topLeftVertex;
                 if (isHorizontallyConnected)
                 {
                     topLeftVertex = p.X < q.X ? p : q;
@@ -596,7 +599,7 @@ namespace MazeGenerator
                     topLeftVertex = p.Y < q.Y ? p : q;
                 }
 
-                tiles[topLeftVertex.Y, topLeftVertex.X].BorderColors[isHorizontallyConnected ? (int)Tile.Borders.Right : (int)Tile.Borders.Bottom] = Color.LightGray;
+                Tiles[topLeftVertex.Y, topLeftVertex.X].BorderColors[isHorizontallyConnected ? (int)Tile.Borders.Right : (int)Tile.Borders.Bottom] = Color.LightGray;
             }
         }
         private void ChangeSelectedHeuristic(
@@ -604,50 +607,50 @@ namespace MazeGenerator
             int buttonIndex,
             float newOrdinalDistance)
         {
-            stopwatch.Restart();
-            stopwatch.Stop();
-            if (heuristic == WeightedDirectedGraph<int>.Manhattan)
+            Stopwatch.Restart();
+            Stopwatch.Stop();
+            if (Heuristic == WeightedDirectedGraph<int>.Manhattan)
             {
-                buttons[(int)buttonNames.SelectManhattan].Text = "Manhattan Heuristic";
-                buttons[(int)buttonNames.SelectManhattan].BackgroundColor = Color.White;
+                Buttons[(int)ButtonNames.SelectManhattan].Text = "Manhattan Heuristic";
+                Buttons[(int)ButtonNames.SelectManhattan].BackgroundColor = Color.White;
             }
-            else if (heuristic == WeightedDirectedGraph<int>.Euclidean)
+            else if (Heuristic == WeightedDirectedGraph<int>.Euclidean)
             {
-                buttons[(int)buttonNames.SelectEuclidean].Text = "Euclidean Heuristic";
-                buttons[(int)buttonNames.SelectEuclidean].BackgroundColor = Color.White;
+                Buttons[(int)ButtonNames.SelectEuclidean].Text = "Euclidean Heuristic";
+                Buttons[(int)ButtonNames.SelectEuclidean].BackgroundColor = Color.White;
             }
-            else if (heuristic == WeightedDirectedGraph<int>.Diagonal && OrdinalDistance == 1)
+            else if (Heuristic == WeightedDirectedGraph<int>.Diagonal && OrdinalDistance == 1)
             {
-                buttons[(int)buttonNames.SelectChebyshev].Text = "Chebyshev Heuristic";
-                buttons[(int)buttonNames.SelectChebyshev].BackgroundColor = Color.White;
+                Buttons[(int)ButtonNames.SelectChebyshev].Text = "Chebyshev Heuristic";
+                Buttons[(int)ButtonNames.SelectChebyshev].BackgroundColor = Color.White;
             }
-            else if (heuristic == WeightedDirectedGraph<int>.Diagonal)
+            else if (Heuristic == WeightedDirectedGraph<int>.Diagonal)
             {
-                buttons[(int)buttonNames.SelectOctile].Text = "Octile Heuristic";
-                buttons[(int)buttonNames.SelectOctile].BackgroundColor = Color.White;
+                Buttons[(int)ButtonNames.SelectOctile].Text = "Octile Heuristic";
+                Buttons[(int)ButtonNames.SelectOctile].BackgroundColor = Color.White;
             }
 
-            heuristic = newHeuristic;
+            Heuristic = newHeuristic;
             OrdinalDistance = newOrdinalDistance;
-            string heuristicName = heuristic.Method.Name;
+            string heuristicName = Heuristic.Method.Name;
 
-            if (heuristic == WeightedDirectedGraph<int>.Diagonal && OrdinalDistance == 1)
+            if (Heuristic == WeightedDirectedGraph<int>.Diagonal && OrdinalDistance == 1)
             {
                 heuristicName = "Chebyshev";
             }
-            else if (heuristic == WeightedDirectedGraph<int>.Diagonal)
+            else if (Heuristic == WeightedDirectedGraph<int>.Diagonal)
             {
                 heuristicName = "Octile";
             }
 
-            buttons[buttonIndex].Text = $"{heuristicName} Heuristic (Selected)";
-            buttons[buttonIndex].BackgroundColor = Color.LightSkyBlue;
+            Buttons[buttonIndex].Text = $"{heuristicName} Heuristic (Selected)";
+            Buttons[buttonIndex].BackgroundColor = Color.LightSkyBlue;
         }
-        private void RunPathfinding(pathfinderNames pathfinderName)
+        private void RunPathfinding(PathfinderNames pathfinderName)
         {
             foreach (var vertex in visitedNodes)
             {
-                Tile tile = tiles[vertex.Y, vertex.X];
+                Tile tile = Tiles[vertex.Y, vertex.X];
                 var tileType = tile.TileType;
 
                 if (tileType.HasFlag(TileTypes.Start) ||
@@ -659,24 +662,24 @@ namespace MazeGenerator
 
             switch (pathfinderName)
             {
-                case pathfinderNames.Djikstra:
-                    vertexGraph.DijkstraPathfinder(startVertex, endVertex, out path, out visitedNodes);
+                case PathfinderNames.Djikstra:
+                    VertexGraph.DijkstraPathfinder(StartVertex, EndVertex, out path, out visitedNodes);
                     break;
 
-                case pathfinderNames.AStar:
-                    vertexGraph.AStarPathfinder(
-                        startVertex,
-                        endVertex,
+                case PathfinderNames.AStar:
+                    VertexGraph.AStarPathfinder(
+                        StartVertex,
+                        EndVertex,
                         CardinalDistance,
                         OrdinalDistance,
                         out path,
                         out visitedNodes,
-                        heuristic);
+                        Heuristic);
                     break;
             }
 
-            visualizationProgressionIndex = 0;
-            stopwatch.Restart();
+            VisualizationProgressionIndex = 0;
+            Stopwatch.Restart();
         }
         private void UpdateTiles(MouseState mouseState, MouseState prevMouseState, Point mousePos, Point prevMousePos, Viewport viewport)
         {
@@ -684,39 +687,39 @@ namespace MazeGenerator
             || mousePos.Y < 0
             || prevMousePos.X < 0
             || prevMousePos.Y < 0
-            || mousePos.X >= tiles.GetLength(1)
-            || mousePos.Y >= tiles.GetLength(0)
-            || prevMousePos.X >= tiles.GetLength(1)
-            || prevMousePos.Y >= tiles.GetLength(0)
+            || mousePos.X >= Tiles.GetLength(1)
+            || mousePos.Y >= Tiles.GetLength(0)
+            || prevMousePos.X >= Tiles.GetLength(1)
+            || prevMousePos.Y >= Tiles.GetLength(0)
             || mouseState.Position.X >= viewport.Height
             || mouseState.Position.Y >= viewport.Height
             || prevMouseState.Position.X >= viewport.Height
             || prevMouseState.Position.X >= viewport.Height)
             {
-                if (specialTileType == SpecialTileTypes.Start || specialTileType == SpecialTileTypes.End)
+                if (SpecialTileType == SpecialTileTypes.Start || SpecialTileType == SpecialTileTypes.End)
                 {
-                    var lastValidVertex = vertexMap[new Point(lastValidTile.X, lastValidTile.Y)];
-                    if (specialTileType == SpecialTileTypes.Start)
+                    var lastValidVertex = VertexMap[new Point(LastValidTile.X, LastValidTile.Y)];
+                    if (SpecialTileType == SpecialTileTypes.Start)
                     {
-                        startVertex = lastValidVertex;
+                        StartVertex = lastValidVertex;
                     }
                     else
                     {
-                        endVertex = lastValidVertex;
+                        EndVertex = lastValidVertex;
                     }
 
-                    lastValidTile.TileType = draggingTileType;
-                    specialTileType = SpecialTileTypes.None;
-                    draggingTileType = TileTypes.Wall;
+                    LastValidTile.TileType = DraggingTileType;
+                    SpecialTileType = SpecialTileTypes.None;
+                    DraggingTileType = TileTypes.Wall;
                 }
 
                 return;
             }
 
-            Tile currTile = tiles[mousePos.Y, mousePos.X];
+            Tile currTile = Tiles[mousePos.Y, mousePos.X];
             if (!currTile.TileType.HasFlag(TileTypes.Start) && !currTile.TileType.HasFlag(TileTypes.End))
             {
-                lastValidTile = currTile;
+                LastValidTile = currTile;
             }
 
             if (mouseState.LeftButton == ButtonState.Pressed)
@@ -730,65 +733,65 @@ namespace MazeGenerator
         private void PlaceTiles(Tile currTile)
         {
             // Start or End
-            if (draggingTileType == TileTypes.Start || draggingTileType == TileTypes.End)
+            if (DraggingTileType == TileTypes.Start || DraggingTileType == TileTypes.End)
             {
-                stopwatch.Restart();
-                stopwatch.Stop();
-                if (currTile.TileType.HasFlag(draggingTileType))
+                Stopwatch.Restart();
+                Stopwatch.Stop();
+                if (currTile.TileType.HasFlag(DraggingTileType))
                 {
-                    currTile.TileType ^= draggingTileType;
+                    currTile.TileType ^= DraggingTileType;
                 }
             }
         }
         private void UpdateDraggingTileType(Tile currTile, MouseState prevMouseState)
         {
             // place a start/end tile when released
-            if (specialTileType != SpecialTileTypes.None && prevMouseState.LeftButton == ButtonState.Pressed)
+            if (SpecialTileType != SpecialTileTypes.None && prevMouseState.LeftButton == ButtonState.Pressed)
             {
-                if (specialTileType == SpecialTileTypes.Start)
+                if (SpecialTileType == SpecialTileTypes.Start)
                 {
                     if (currTile.TileType == TileTypes.End)
                     {
-                        lastValidTile.TileType = TileTypes.Start;
+                        LastValidTile.TileType = TileTypes.Start;
                     }
                     else
                     {
                         currTile.TileType = TileTypes.Start;
-                        startVertex = vertexMap[new Point(currTile.X, currTile.Y)];
+                        StartVertex = VertexMap[new Point(currTile.X, currTile.Y)];
                     }
                 }
                 else
                 {
                     if (currTile.TileType == TileTypes.Start)
                     {
-                        lastValidTile.TileType = TileTypes.End;
+                        LastValidTile.TileType = TileTypes.End;
                     }
                     else
                     {
                         currTile.TileType = TileTypes.End;
-                        endVertex = vertexMap[new Point(currTile.X, currTile.Y)];
+                        EndVertex = VertexMap[new Point(currTile.X, currTile.Y)];
                     }
                 }
             }
 
-            specialTileType = SpecialTileTypes.None;
+            SpecialTileType = SpecialTileTypes.None;
             if (currTile.TileType.HasFlag(TileTypes.Start))
             {
-                lastValidTile = currTile;
-                specialTileType = SpecialTileTypes.Start;
-                draggingTileType = TileTypes.Start;
+                LastValidTile = currTile;
+                SpecialTileType = SpecialTileTypes.Start;
+                DraggingTileType = TileTypes.Start;
             }
             else if (currTile.TileType.HasFlag(TileTypes.End))
             {
-                lastValidTile = currTile;
-                specialTileType = SpecialTileTypes.End;
-                draggingTileType = TileTypes.End;
+                LastValidTile = currTile;
+                SpecialTileType = SpecialTileTypes.End;
+                DraggingTileType = TileTypes.End;
             }
             else if (
                 !currTile.TileType.HasFlag(TileTypes.Start) &&
                 !currTile.TileType.HasFlag(TileTypes.End))
             {
-                draggingTileType = selectedTileType;
+                DraggingTileType = SelectedTileType;
             }
         }
         private void UpdateCameraPosition(KeyboardState keyboardState)

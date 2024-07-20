@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj": {}
+    "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj": {
+    "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
+        "projectUniqueName": "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
         "projectName": "PathfindingVisualizer",
-        "projectPath": "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
+        "projectPath": "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
         "packagesPath": "C:\\Users\\brand\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\obj\\",
+        "outputPath": "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\brand\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -59,10 +59,29 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[3.1.10, 3.1.10]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.win-x64",
+              "version": "[3.1.32, 3.1.32]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            },
+            {
+              "name": "Microsoft.WindowsDesktop.App.Ref",
+              "version": "[3.1.0, 3.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -71,7 +90,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.410\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

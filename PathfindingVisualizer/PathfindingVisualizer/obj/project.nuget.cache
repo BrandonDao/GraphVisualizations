@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "tNLYisgrTya4p+zytLmdD40QnxsdahY9J1PXALdRj7cK+kFfrzYeHRS8j0hg2xMRWv2QZWwAHf/B7u8CpoHIdQ==",
+  "dgSpecHash": "fRtrT/ISWWcniDKBMrFc5xiUTvbKIi46J7nxF0hMpwZi5l0GEWKTJml33/64J33Bu6ATODQSm5pEBZyR1kUhog==",
   "success": true,
-  "projectFilePath": "C:\\Users\\brand\\Documents\\GitHub\\Projects\\cSharp\\Monogame\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
+  "projectFilePath": "C:\\Users\\brand\\Documents\\Github\\GraphVisualizations\\PathfindingVisualizer\\PathfindingVisualizer\\PathfindingVisualizer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brand\\.nuget\\packages\\libuv\\1.9.1\\libuv.1.9.1.nupkg.sha512",
     "C:\\Users\\brand\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\1.1.0\\microsoft.codeanalysis.analyzers.1.1.0.nupkg.sha512",
@@ -127,7 +127,11 @@
     "C:\\Users\\brand\\.nuget\\packages\\system.xml.xdocument\\4.0.11\\system.xml.xdocument.4.0.11.nupkg.sha512",
     "C:\\Users\\brand\\.nuget\\packages\\system.xml.xmldocument\\4.0.1\\system.xml.xmldocument.4.0.1.nupkg.sha512",
     "C:\\Users\\brand\\.nuget\\packages\\system.xml.xpath\\4.0.1\\system.xml.xpath.4.0.1.nupkg.sha512",
-    "C:\\Users\\brand\\.nuget\\packages\\system.xml.xpath.xdocument\\4.0.1\\system.xml.xpath.xdocument.4.0.1.nupkg.sha512"
+    "C:\\Users\\brand\\.nuget\\packages\\system.xml.xpath.xdocument\\4.0.1\\system.xml.xpath.xdocument.4.0.1.nupkg.sha512",
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\3.1.0\\microsoft.windowsdesktop.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.netcore.app.ref\\3.1.0\\microsoft.netcore.app.ref.3.1.0.nupkg.sha512",
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\3.1.10\\microsoft.aspnetcore.app.ref.3.1.10.nupkg.sha512",
+    "C:\\Users\\brand\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.32\\microsoft.netcore.app.host.win-x64.3.1.32.nupkg.sha512"
   ],
   "logs": []
 }
